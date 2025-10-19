@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Приложению необходим доступ к микрофону для записи аудио напоминаний</string>
+    <key>NSUserNotificationsUsageDescription</key>
+    <string>Приложению необходим доступ к уведомлениям для напоминания о важных событиях</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>background-processing</string>
+        <string>background-fetch</string>
+    </array>
+</dict>
+</plist>
