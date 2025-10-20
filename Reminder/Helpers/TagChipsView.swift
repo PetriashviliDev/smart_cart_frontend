@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TagChipsView<Content: View, Tag: Equatable>: View where Tag: Hashable {
-    var spacing: CGFloat = 10
+    var spacing: CGFloat = 12
     var animation: Animation = .easeInOut(duration: 0.2)
     var tags: [Tag]
     @ViewBuilder var content: (Tag, Bool) -> Content

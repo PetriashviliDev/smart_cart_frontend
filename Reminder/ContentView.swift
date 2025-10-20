@@ -24,7 +24,8 @@ struct ContentView: View {
         ZStack(alignment: .bottom) {
             RemindersListView(modelContext: modelContext)
             
-            HStack(spacing: 18) {
+            HStack(spacing: 15) {
+                Spacer()
                 Button {
                     presentingAdd = true
                 } label: {
@@ -33,14 +34,12 @@ struct ContentView: View {
                             .fill(Color.secondary)
                             .frame(width: 50, height: 50)
                         
-                        Image(systemName: "plus")
+                        Image(systemName: "square.and.pencil")
                             .font(.system(size: 25))
                             .foregroundColor(.white)
                     }
                 }
-                
-                Spacer()
-                
+                                
                 Button {
                 } label: {
                     
@@ -49,7 +48,7 @@ struct ContentView: View {
                             .fill(Color.secondary)
                             .frame(width: 50, height: 50)
                         
-                        Image(systemName: micPressed ? "microphone.fill" : "microphone")
+                        Image(systemName: micPressed ? "waveform.badge.microphone" : "microphone")
                             .font(.system(size: 25))
                             .foregroundColor(.white)
                             .scaleEffect(micPressed ? 1.08 : 1.0)
@@ -67,8 +66,8 @@ struct ContentView: View {
                         }
                 )
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 14)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 10)
         }
         .onAppear {
             Task {
@@ -90,6 +89,31 @@ struct ContentView: View {
                 .padding(.trailing, 12)
                 .padding(.bottom, 86)
             }
+        }
+    }
+}
+
+struct MiniRecorderPanel<Content: View>: View {
+    var onClose: () -> Void
+    @ViewBuilder var content: () -> Content
+    
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            content()
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color(.separator), lineWidth: 0.5)
+                )
+            
+            Button(action: onClose) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title3)
+                    .foregroundColor(.secondary)
+                    .background(Color(.systemBackground).clipShape(Circle()))
+            }
+            .padding(6)
         }
     }
 }

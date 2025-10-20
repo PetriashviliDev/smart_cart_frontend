@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4B3F3B3A2EA6A1C500E806E6 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3F3B392EA6A1C500E806E6 /* EmptyStateView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4BF35A612E9C254300BEF3BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B3F3B392EA6A1C500E806E6 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		4BF35A502E9C254200BEF3BD /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF35A602E9C254300BEF3BD /* ReminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF35A6A2E9C254300BEF3BD /* ReminderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReminderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +97,7 @@
 				4BF35A632E9C254300BEF3BD /* ReminderTests */,
 				4BF35A6D2E9C254300BEF3BD /* ReminderUITests */,
 				4BF35A512E9C254200BEF3BD /* Products */,
+				4B3F3B392EA6A1C500E806E6 /* EmptyStateView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -250,6 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B3F3B3A2EA6A1C500E806E6 /* EmptyStateView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

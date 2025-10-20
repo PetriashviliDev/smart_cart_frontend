@@ -13,7 +13,7 @@ struct MonthCalendarView: View {
 
     @Binding var title: String
     @Binding var focused: Week
-    @Binding var selection: Date?
+    @Binding var selection: Date
 
     @State private var months: [Month]
     @State private var position: ScrollPosition
@@ -21,7 +21,7 @@ struct MonthCalendarView: View {
 
     init(
         _ title: Binding<String>,
-        selection: Binding<Date?>,
+        selection: Binding<Date>,
         focused: Binding<Week>,
         isDragging: Bool,
         dragProgress: CGFloat
@@ -37,8 +37,8 @@ struct MonthCalendarView: View {
         let creationDate = focused.wrappedValue.days.last
         var currentMonth = Month(from: creationDate ?? .now, order: .current)
         
-        if let selection = selection.wrappedValue,
-           let lastDayOfTheMonth = currentMonth.weeks.first?.days.last,
+        let selection = selection.wrappedValue
+        if let lastDayOfTheMonth = currentMonth.weeks.first?.days.last,
            !Calendar.isSameMonth(lastDayOfTheMonth, selection),
            let previousMonth = currentMonth.previousMonth
         {
@@ -98,7 +98,7 @@ struct MonthCalendarView: View {
                 return
             }
             
-            if let selection, focusedMonth.weeks.flatMap(\.days).contains(selection),
+            if focusedMonth.weeks.flatMap(\.days).contains(selection),
                let selectedWeek = focusedMonth.weeks.first(where: { $0.days.contains(selection) })
             {
                 focused = selectedWeek
@@ -109,9 +109,8 @@ struct MonthCalendarView: View {
             title = Calendar.monthAndYear(from: focusedWeek.days.last!)
         }
         .onChange(of: selection) { _, newValue in
-            guard let date = newValue,
-                  let week = months.flatMap(\.weeks).first(where: { (week) -> Bool in
-                      week.days.contains(date)
+            guard let week = months.flatMap(\.weeks).first(where: { (week) -> Bool in
+                      week.days.contains(where: { Calendar.current.isDate($0, inSameDayAs: newValue) })
                   })
             else {
                 return
@@ -123,10 +122,9 @@ struct MonthCalendarView: View {
             else {
                 return
             }
-            if let selection,
-               let currentMonth = months.first(where: { $0.id == (position.viewID as? String) }),
-               currentMonth.weeks.flatMap(\.days).contains(selection),
-               let newFocus = currentMonth.weeks.first(where: { $0.days.contains(selection) })
+            if let currentMonth = months.first(where: { $0.id == (position.viewID as? String) }),
+               currentMonth.weeks.flatMap(\.days).contains(where: { Calendar.current.isDate($0, inSameDayAs: selection) }),
+               let newFocus = currentMonth.weeks.first(where: { $0.days.contains(where: { Calendar.current.isDate($0, inSameDayAs: selection) }) })
             {
                 focused = newFocus
             }
@@ -157,7 +155,7 @@ extension MonthCalendarView {
 #Preview {
     MonthCalendarView(
         .constant(""),
-        selection: .constant(nil),
+        selection: .constant(.now),
         focused: .constant(.current),
         isDragging: false,
         dragProgress: 1

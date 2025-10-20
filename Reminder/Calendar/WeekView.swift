@@ -12,11 +12,11 @@ struct WeekView: View {
     let dragProgress: CGFloat
     let hideDifferentMonth: Bool
     
-    @Binding var selectedDate: Date?
+    @Binding var selectedDate: Date
     
     init(
         week: Week,
-        selectedDate: Binding<Date?>,
+        selectedDate: Binding<Date>,
         dragProgress: CGFloat,
         hideDifferentMonth: Bool = false
     ) {
@@ -39,7 +39,6 @@ struct WeekView: View {
                 }
             }
         }
-        .padding(.horizontal)
     }
     
     private func isDayVisible(for date: Date) -> Bool {

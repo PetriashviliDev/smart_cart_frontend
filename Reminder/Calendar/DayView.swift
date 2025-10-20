@@ -9,20 +9,20 @@ import SwiftUI
 
 struct DayView: View {
     let date: Date
-    @Binding var selectedDate: Date?
+    @Binding var selectedDate: Date
     
     var body: some View {
         VStack(spacing: 12) {
             Text(Calendar.dayNumber(from: date))
                 .background {
-                    if date == selectedDate {
+                    if Calendar.current.isDate(date, inSameDayAs: selectedDate) {
                         Circle()
                             .foregroundStyle(.white)
                             .frame(width: 30, height: 30)
                     }
                 }
         }
-        .foregroundStyle(selectedDate == date ? Color.black : Color.white)
+        .foregroundStyle(Calendar.current.isDate(date, inSameDayAs: selectedDate) ? Color.black : Color.white)
         .font(.system(.body, design: .rounded, weight: .medium))
         .onTapGesture {
             withAnimation(.easeInOut) {
@@ -33,5 +33,5 @@ struct DayView: View {
 }
 
 #Preview {
-    DayView(date: .now, selectedDate: .constant(nil))
+    DayView(date: .now, selectedDate: .constant(.now))
 }
