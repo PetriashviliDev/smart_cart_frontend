@@ -17,22 +17,26 @@ struct DateTimePickerView: View {
     }
     
     var body: some View {
-        VStack(spacing: 30) {
-            VStack(spacing: 10) {
-                Text("Выбранная дата и время")
-                    .font(.headline)
+        ZStack(alignment: .top) {
+            Color.primary.opacity(0.9)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 30) {
+                VStack(spacing: 10) {
+                    Text("Выбранная дата и время")
+                        .font(.title2)
+                    
+                    Text(formatDateTime(selectedDate))
+                        .font(.title3)
+                }
+                .foregroundColor(.white)
                 
-                Text(formatDateTime(selectedDate))
-                    .font(.body)
-                    .foregroundColor(.secondary)
+                DateTimeWheelPicker(selectedDate: $selectedDate)
+                
+                Spacer()
             }
-            
-            DateTimeWheelPicker(selectedDate: $selectedDate)
-                .padding(.horizontal, 20)
-            
-            Spacer()
+            .padding(.horizontal, 20)
         }
-        .padding(.horizontal, 20)
     }
     
     private func formatDateTime(_ date: Date) -> String {
@@ -81,6 +85,29 @@ struct DateTimeWheelPicker: View {
         Array(stride(from: 0, through: 55, by: 5))
     }
     
+    // Вычисляемые свойства для определения доступных часов и минут
+    private var currentAvailableHours: [Int] {
+        if isTodaySelected {
+            let currentHour = calendar.component(.hour, from: Date())
+            return Array(currentHour...23)
+        } else {
+            return availableHours
+        }
+    }
+    
+    private var currentAvailableMinutes: [Int] {
+        if isTodaySelected && selectedHour == calendar.component(.hour, from: Date()) {
+            let currentMinute = calendar.component(.minute, from: Date())
+            return availableMinutes.filter { $0 >= currentMinute }
+        } else {
+            return availableMinutes
+        }
+    }
+    
+    private var isTodaySelected: Bool {
+        calendar.isDateInToday(availableDates[selectedDayIndex])
+    }
+    
     var body: some View {
         VStack(spacing: .zero) {
             VStack(spacing: .zero) {
@@ -89,32 +116,37 @@ struct DateTimeWheelPicker: View {
                         ForEach(0..<availableDates.count, id: \.self) { index in
                             Text(dayString(for: availableDates[index]))
                                 .font(.body)
+                                .foregroundColor(.black)
                                 .tag(index)
                         }
                     }
                     .pickerStyle(.wheel)
                     .frame(width: 140)
                     .onChange(of: selectedDayIndex) {
+                        adjustTimeIfNeeded()
                         updateSelectedDate()
                     }
                     
                     Picker("Час", selection: $selectedHour) {
-                        ForEach(availableHours, id: \.self) { hour in
+                        ForEach(currentAvailableHours, id: \.self) { hour in
                             Text(String(format: "%2d", hour))
                                 .font(.body)
+                                .foregroundColor(.black)
                                 .tag(hour)
                         }
                     }
                     .pickerStyle(.wheel)
                     .frame(width: 80)
                     .onChange(of: selectedHour) {
+                        adjustMinutesIfNeeded()
                         updateSelectedDate()
                     }
                     
                     Picker("Минута", selection: $selectedMinute) {
-                        ForEach(availableMinutes, id: \.self) { minute in
+                        ForEach(currentAvailableMinutes, id: \.self) { minute in
                             Text(String(format: "%2d", minute))
                                 .font(.body)
+                                .foregroundColor(.black)
                                 .tag(minute)
                         }
                     }
@@ -126,9 +158,8 @@ struct DateTimeWheelPicker: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+            .background(Color.secondary)
+            .cornerRadius(25)
             
             quickSelectView
         }
@@ -138,8 +169,8 @@ struct DateTimeWheelPicker: View {
         VStack(alignment: .leading, spacing: 12) {
             
             Text("Напомнить через")
-                .font(.subheadline)
-                .foregroundColor(.black)
+                .font(.headline)
+                .foregroundColor(.white)
                 .padding(.horizontal, 4)
             
             LazyVGrid(columns: [
@@ -189,7 +220,35 @@ struct DateTimeWheelPicker: View {
             second: 0,
             of: selectedDay
         ) {
-            selectedDate = newDate
+            // Проверяем, что выбранная дата не в прошлом
+            if newDate > Date() {
+                selectedDate = newDate
+            } else {
+                // Если дата в прошлом, автоматически устанавливаем ближайшую доступную дату
+                selectCurrentTimePlus5()
+            }
+        }
+    }
+    
+    private func adjustTimeIfNeeded() {
+        if isTodaySelected {
+            let currentHour = calendar.component(.hour, from: Date())
+            if selectedHour < currentHour {
+                selectedHour = currentHour
+            }
+            adjustMinutesIfNeeded()
+        }
+    }
+    
+    private func adjustMinutesIfNeeded() {
+        if isTodaySelected && selectedHour == calendar.component(.hour, from: Date()) {
+            let currentMinute = calendar.component(.minute, from: Date())
+            if selectedMinute < currentMinute {
+                // Находим ближайшую доступную минуту
+                if let nextMinute = currentAvailableMinutes.first {
+                    selectedMinute = nextMinute
+                }
+            }
         }
     }
     
