@@ -48,12 +48,6 @@ struct EditReminderView: View {
                     }
                 }
                 
-                Section("Теги") {
-                    TagSelector(available: viewModel.availableTags, selected: $viewModel.selectedTags)
-                }
-
-                // Приоритет убран по требованию
-                
                 Section {
                     Button("Удалить напоминание", role: .destructive) {
                         viewModel.deleteReminder()

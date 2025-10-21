@@ -34,7 +34,6 @@ class RemindersListViewModel: BaseViewModel {
                 sortBy: [SortDescriptor(\.date, order: .forward)]
             )
             reminders = try modelContext.fetch(descriptor)
-            rebuildTags()
             applyFilters()
         } catch {
             handleError(error)
@@ -49,33 +48,6 @@ class RemindersListViewModel: BaseViewModel {
             modelContext.delete(reminder)
             reminders.removeAll { $0.id == reminder.id }
         }
-    }
-    
-    func rebuildTags() {
-        let tags = Set(reminders.flatMap { $0.tags })
-        allTags = Array(tags).sorted()
-        if selectedTags.isEmpty {
-            selectedTags = Set(allTags)
-        }
-    }
-    
-    func toggleTag(_ tag: String) {
-        if selectedTags.contains(tag) {
-            selectedTags.remove(tag)
-        } else {
-            selectedTags.insert(tag)
-        }
-        applyFilters()
-    }
-    
-    func selectAllTags() {
-        selectedTags = Set(allTags)
-        applyFilters()
-    }
-    
-    func clearAllTags() {
-        selectedTags.removeAll()
-        applyFilters()
     }
     
     func applyFilters() {

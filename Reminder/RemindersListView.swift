@@ -114,8 +114,8 @@ struct RemindersListView: View {
                     .clipped()
                 }
                 
-                TagChipsView(tags: tags) { tag, isSelected in
-                    HStack(spacing: 10) {
+                TagChipsView(tags: tags, selectedTags: tags) { tag, isSelected in
+                    HStack(spacing: 8) {
                         Text(tag)
                             .font(.caption)
                             .foregroundStyle(.white)
@@ -139,6 +139,7 @@ struct RemindersListView: View {
                     )
                 } didChangeSelection: { _ in }
                 
+                // Капсула для растягивания календаря
                 Capsule()
                     .fill(.white)
                     .frame(width: 70, height: 3)
