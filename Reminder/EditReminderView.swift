@@ -73,7 +73,7 @@ struct EditReminderView: View {
                 }
             }
             .sheet(isPresented: $viewModel.showingDatePicker) {
-                DatePickerSheet(selectedDate: $viewModel.selectedDate)
+                //DatePickerSheet(selectedDate: $viewModel.selectedDate)
             }
             .alert("Ошибка", isPresented: $viewModel.showingError) {
                 Button("OK") { viewModel.clearError() }

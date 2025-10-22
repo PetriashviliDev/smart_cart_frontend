@@ -16,9 +16,7 @@ class AddReminderViewModel: BaseViewModel {
     @Published var selectedPriority: Priority = .medium
     @Published var showingDatePicker = false
     @Published var selectedTags: Set<String> = []
-    
-    let availableTags: [String] = ["Образование", "Медицина", "Работа", "Личное", "Покупки", "Прочее"]
-    
+        
     private let modelContext: ModelContext
     private let notificationService = NotificationService.shared
     

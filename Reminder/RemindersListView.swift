@@ -28,7 +28,7 @@ struct RemindersListView: View {
     // Получать из календаря
     private let symbols = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
-    private let tags = ["Образование", "Медицина", "Работа", "Личное", "Покупки", "Праздник", "Прочее"]
+    private let tags = TagProvider.shared.tags
     
     enum CalendarType {
         case week
@@ -52,6 +52,7 @@ struct RemindersListView: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            
             Color.primary.opacity(0.9)
                 .ignoresSafeArea()
             

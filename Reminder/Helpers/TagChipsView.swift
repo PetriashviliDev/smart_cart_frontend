@@ -21,6 +21,7 @@ struct TagChipsView<Content: View, Tag: Equatable>: View where Tag: Hashable {
         animation: Animation = .easeInOut(duration: 0.2),
         tags: [Tag],
         selectedTags: [Tag]? = nil,
+        showControlTag: Bool = true,
         @ViewBuilder content: @escaping (Tag, Bool) -> Content,
         didChangeSelection: @escaping ([Tag]) -> Void
     ) {
@@ -29,6 +30,7 @@ struct TagChipsView<Content: View, Tag: Equatable>: View where Tag: Hashable {
         self.tags = tags
         self.content = content
         self.didChangeSelection = didChangeSelection
+        self.showControlTag = showControlTag
         self._selectedTags = State(initialValue: selectedTags ?? tags)
     }
     
